@@ -16,11 +16,6 @@
              welding torch in the corner.)
             (downstairs stairway living-room))})
 
-; (def obj-locations (hash-map 'whiskey-bottle 'living-room
-;         'bucket 'living-room
-;         'chain 'garden
-;         'frog 'garden))
-
 (def obj-locations {'whiskey-bottle 'living-room
         'bucket 'living-room
         'chain 'garden
@@ -32,7 +27,7 @@
 	(first (loc loc-map)))
 
 (defn describe-path [path]
-  `(there is a ~(second path) going ~(first path) from here.))
+  (str "there is a " (str (second path)) " going " (str (first path)) " from here. "))
 
 (defn spel-print [list] (map (fn [x] (symbol (name x))) list))
 
@@ -40,7 +35,7 @@
   ;(get world location) need elements after first one, path(s), using rest
   ;rest gets everything after first element
   ;map applies describe-path to all elements of list
-  (apply concat (map describe-path (rest (get world location)))))
+  (apply str (map describe-path (rest (get world location)))))
 
 (defn is-at? [object object-location locations]
   (= (object locations) object-location))
@@ -87,12 +82,10 @@
     (do
       (def obj-locations (assoc obj-locations object location))
       (spel-print `(you dropped the ~object in the ~location)))
-    :else "you are not holding the object"))
+    :else "you are not holding the object"+'object))
 
 (defspel pickup [object]
   `(pickup-object '~object))
-
-
 
 (defn inventory [] 
   (filter (fn[x] (is-at? x 'body obj-locations))
@@ -103,6 +96,7 @@
     (nil? (some #{object} (inventory)))
     false
     :else true))
+
 
 (def chain-welded false)
 (def bucket-filled false)
