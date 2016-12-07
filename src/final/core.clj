@@ -46,15 +46,20 @@
 
 
 (defn walk-direction [direction]
+  ;assign next to first location in world that has direction matching given direction
+  ;filter returns all locations matching given direction
   (let [next (first (filter (fn[x] (= direction (first x)))
                                     (rest (location world))))]
         (cond next
-              (do 
+              ;if next not nil
+              ;redefine location to next, where person is moving to
+              ;then execute look function
+              (do
                 (def location (nth next 2))
                 (look))
-          :else (str "you can't go that way."))))
+          :else "you can't go that way.")))
 
-(defmacro defspel [& rest] `(defmacro ~@rest))
+(defmacro defspel [& other] `(defmacro ~@other))
 
 (defspel walk [direction]
   `(walk-direction '~direction))
@@ -100,64 +105,61 @@
           (= '~object# '~'~obj)
           (is-holding? '~'~subj))
         ~@'~rest
-    :else (str "I can't " (str 'command) " like that."))))
+    :else (str "you cannot " (str 'command) " like that."))))
 
 (game-action weld chain bucket attic
   (cond
     (and (is-holding? 'bucket)
       (def chain-welded true))
-    (str "the chain is now securely welded to the bucket.")
-
-    :else (str "you don't have the bucket.")))
+      "the chain is now securely welded to the bucket."
+    :else "you don't have the bucket."))
 
 (game-action dunk bucket well garden
   (cond 
     chain-welded 
         (do 
           (def bucket-filled true)
-          (str "the bucket is now filled with water."))
-    :else (str "the water level is too low to reach.")))
+          "the bucket is now filled with water.")
+    :else "the water level is too low to reach."))
 
 (game-action splash bucket wizard living-room
   (cond
     (not bucket-filled)
-    (str "the bucket has nothing in it")
+    "the bucket has nothing in it"
 
     (is-holding? 'frog)
-    (str "the wizard awakens and sees that you stole his frog. he is so upset he banishes you to the netherworlds- you lose! the end.")
+    "the wizard awakens and sees that you stole his frog. he is so upset he banishes you to the netherworlds- you lose! the end."
 
-    :else (str "the wizard awakens from his slumber and greets you warmly. he hands you the magic low-carb donut- you win! the end.")))
+    :else "the wizard awakens from his slumber and greets you warmly. he hands you the magic low-carb donut- you win! the end."))
 
 
 (defn -main []
   (println (look))
-  (println)
+  (newline)
   (println "PICKUP: " (pickup bucket))
-  (println)
+  (newline)
   (println "WALK: " (walk west))
-  (println)
+  (newline)
   (println "PICKUP: " (pickup frog))
-  (println)
+  (newline)
   (println "PICKUP: " (pickup chain))
-  (println)
+  (newline)
   (println "DROP: " (drop-object 'frog))
-  (println)
+  (newline)
   (println "WALK: " (walk east))
-  (println)
+  (newline)
   (println "WALK: " (walk upstairs))
-  (println)
+  (newline)
   (println "WELD: " (weld chain bucket))
-  (println)
+  (newline)
   (println "WALK: " (walk downstairs))
-  (println)
+  (newline)
   (println "WALK: " (walk west))
-  (println)
+  (newline)
   (println "DUNK: " (dunk bucket well))
-  (println)
+  (newline)
   (println "WALK: " (walk east))
-  (println)
+  (newline)
   (println (splash bucket wizard))
   )
-
-
 
