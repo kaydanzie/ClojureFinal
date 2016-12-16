@@ -1,4 +1,5 @@
-(ns final.core)
+(ns final.core
+  (:gen-class))
 
 (def objects '(whiskey-bottle bucket frog chain))
 
@@ -128,9 +129,13 @@
       (str "you dropped the " (str object) " in the " (str location) "."))
     :else (str "you are not holding the " (str object) ".")))
 
+;prints where all 4 objects are currently located
+;updated locations if you have moved any from original positions
+;different sentence structure for objects being held
 (defn show-locations [objects]
   (apply str (map (fn [x] 
-                    (cond (not= (get obj-locations x) 'body)
+                    ;if it isn't being held
+                    (cond (not (is-holding? x))
                       (str "the " (str x) " is in the " (str (get obj-locations x)) ". ")
                       :else (str "you are holding the " (str x) ". "))
                     )
@@ -160,6 +165,8 @@
 
 (game-action dunk bucket well garden
   (cond 
+    ;game-action macro checks location, subject, object, is-holding
+    ;only need to redefine bool and return string
     chain-welded 
         (do 
           (def bucket-filled true)
@@ -168,6 +175,7 @@
 
 (game-action splash bucket wizard living-room
   (cond
+    ;bucket-filled = additional condition from game-action that must be met
     (not bucket-filled)
     "the bucket has nothing in it"
 
@@ -192,9 +200,7 @@
   (newline)
   (println "DROP: " (drop-object 'frog))
   (newline)
-  (println (walk west))
-  (newline)
-  (println "PICKUP: " (pickup frog))
+  ;(println "PICKUP: " (pickup frog))
   (newline)
   (println "WALK: " (walk east))
   (newline)
