@@ -2,7 +2,7 @@
 
 Clojure implementation of http://www.lisperati.com/casting.html
 
-##Language Concepts
+## Language Concepts
 <ul>
 <li>Anonymous Functions</li>
 <li>Macros + Reader Macros</li>
@@ -11,7 +11,7 @@ Clojure implementation of http://www.lisperati.com/casting.html
 <li>Immutability</li>
 </ul>
 
-##Added Functionality
+## Added Functionality
 <ul>
 <li>Drop: used to drop currently-held objects in current location</li>
 <li>Count: tracks number of times objects have been picked up</li>
